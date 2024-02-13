@@ -67,10 +67,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: var(--white);
 }
 
 li {
   list-style: none;
+}
+
+a {
+  text-decoration: none;
 }
 
 a,
@@ -78,7 +83,7 @@ img,
 iframe,
 button,
 span {
-  display: block
+  display: block;
 }
 
 img {
@@ -133,6 +138,7 @@ body {
   #REUSED STYLE
 \*-----------------------------------*/
 
+/* loading spinner */
 .search-wrapper::before {
   position: absolute;
   top: 14px;
@@ -161,8 +167,14 @@ body {
   }
 }
 
+/* title */
 
+.title {
+  font-size: var(--fs-title);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.5;
 
+}
 
 /*-----------------------------------*\
   #HEADER
@@ -281,10 +293,84 @@ input.search-field {
 /*-----------------------------------*\
   #SIDEBAR
 \*-----------------------------------*/
+.sidebar {
+  position: absolute;
+  top: 96px;
+  left: -340px;
+  bottom: 0;
+  max-width: 340px;
+  width: 100%;
+  background-color: var(--background);
+  border-block-start: 1px solid var(--on-surface-variant);
+  overflow-y: overlay;
+  z-index: 4;
+  visibility: hidden;
+  transition: var(--transition-long);
+}
 
+.sidebar.active {
+  transform: translateX(340px);
+  visibility: visible;
+}
 
+.sidebar-inner {
+  display: grid;
+  gap: 20px;
+  padding-block: 36px;
+}
 
+.sidebar-list,
+.sidebar-footer {
+  padding-inline-start: 36px;
+}
 
+.sidebar::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.sidebar:is(:hover, :focus-visible)::-webkit-scrollbar-thumb {
+  background-color: var(--banner-background);
+}
+
+.sidebar::-webkit-scrollbar-button {
+  height: 16px;
+}
+
+.sidebar-list {
+  display: grid;
+  gap: 8px;
+}
+
+.sidebar-list .title {
+  margin-block-end: 8px;
+}
+
+.sidebar-link {
+  color: var(--on-surface-variant);
+}
+
+.sidebar-link:is(:focus-visible, :hover) {
+  color: var(--on-background);
+}
+
+.sidebar-footer {
+  border-block-start: 1px solid var(--on-surface-variant);
+  padding-block-start: 16px;
+}
+
+.copyright p {
+  letter-spacing: 0.5px;
+  color: var(--on-surface-variant);
+  transition: var(--transition-short);
+}
+
+.copyright p:is(:focus-visible, :hover) {
+  color: var(--on-background);
+}
+
+.sidebar-footer img {
+  margin-block: 16px;
+}
 
 /*-----------------------------------*\
   #HOME PAGE

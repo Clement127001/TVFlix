@@ -7,6 +7,7 @@ function addEventOnElements(elements, callback) {
   });
 }
 
+//toggling the search box
 const searchBox = document.querySelector(".search-box");
 const searchTogglers = document.querySelectorAll("[search-toogler]");
 
