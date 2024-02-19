@@ -140,10 +140,8 @@ body {
 \*-----------------------------------*/
 
 /* loading spinner */
-.search-wrapper::before {
-  position: absolute;
-  top: 14px;
-  right: 20px;
+.search-wrapper::before,
+.load-more::before {
   content: "";
   width: 20px;
   height: 20px;
@@ -154,7 +152,27 @@ body {
   display: none;
 }
 
+.search-wrapper::before {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+}
+
 .search-wrapper.searching::before {
+  display: block;
+}
+
+.load-more {
+  background-color: var(--primary-variant);
+  margin-inline: auto;
+  margin-block: 36px 64px;
+}
+
+.load-more:is(:hover, :focus-visible) {
+  --primary-variant: hsla(350, 67%, 39%, 1)
+}
+
+.load-more.loading::before {
   display: block;
 }
 
@@ -303,9 +321,16 @@ body {
   #HEADER
 \*-----------------------------------*/
 
+.header-wrapper {
+  position: fixed;
+  width: 100%;
+  z-index: 5;
+  background-color: var(--background);
+}
+
 .header {
   position: relative;
-  padding: 24px 16px;
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -527,6 +552,7 @@ input.search-field {
   padding: 24px 20px 48px;
   overflow-y: overlay;
   z-index: 1;
+  padding-block-start: 100px;
 }
 
 .container::after {
@@ -753,7 +779,20 @@ input.search-field {
 /*-----------------------------------*\
   #MOVIE LIST PAGE
 \*-----------------------------------*/
+.genre-list .title-wrapper {
+  margin-block: 12px 32px;
+}
 
+.grid-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 20px;
+}
+
+.genre-list :is(.movie-card, .card-banner) {
+  width: 100%;
+  margin-inline: auto;
+}
 
 
 
