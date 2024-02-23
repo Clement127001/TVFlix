@@ -1,11 +1,15 @@
 "use strict";
 import { fetchMovieDetails, options, imageBaseUrl } from "./api.js";
 
-window.addEventListener("DOMContentLoaded", collectGenere);
+// window.addEventListener("DOMContentLoaded", collectGenere);
 
-async function collectGenere() {
-  await sidebar();
-  addMenuTogglers();
+export async function collectGenere() {
+  try {
+    await sidebar();
+    addMenuTogglers();
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function sidebar() {
@@ -55,7 +59,10 @@ function genreLink(id, name) {
 //toggling menu
 function toggleItems() {
   const menuBtn = document.querySelector(".menu-btn");
-  menuBtn.classList.toggle("active");
   const sidebar = document.querySelector(".sidebar");
+  const overlay = document.querySelector(".overlay");
+
+  menuBtn.classList.toggle("active");
   sidebar.classList.toggle("active");
+  overlay.classList.toggle("active");
 }
