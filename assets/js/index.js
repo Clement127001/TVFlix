@@ -2,10 +2,11 @@
 
 import { fetchMovieDetails, imageBaseUrl } from "./api.js";
 import { collectGenere } from "./sidebar.js";
+import { createMovieCard } from "./movie-card.js";
 
-window.addEventListener("DOMContentLoaded", initiateSidebar);
+window.addEventListener("DOMContentLoaded", initiateHome);
 
-async function initiateSidebar() {
+async function initiateHome() {
   try {
     await collectGenere();
 
@@ -16,8 +17,25 @@ async function initiateSidebar() {
   }
 }
 
+//homepage content
+const homePageSections = [
+  {
+    title: "Upcoming Movies",
+    path: "/movie/upcoming",
+  },
+  {
+    title: "This Week's Trending",
+    path: "/trending/movie/week",
+  },
+  {
+    title: "Top Rated Movies",
+    path: "/movie/top_rated",
+  },
+];
+
 const container = document.querySelector(".container");
 
+//genreList for sidebar and banner
 const gnereList = {
   asString(genreIdList) {
     const newGenreList = [];
@@ -30,6 +48,11 @@ const gnereList = {
   },
 };
 
+/**
+ * all banner utilities
+ */
+
+//creating the banner
 async function createBanner() {
   //fetching the gnere list
   fetchMovieDetails(
@@ -44,14 +67,13 @@ async function createBanner() {
   );
   //fetching the movie list
   fetchMovieDetails(
-    "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+    "https://api.themoviedb.org/3/movie/popular?language=en-US&page=2",
     heroBanner
   );
 }
 
 function heroBanner({ results: movieList }) {
   let controllerIndex = 0;
-
   // console.log(movieList);
 
   //adding the banner slider
@@ -69,38 +91,36 @@ function heroBanner({ results: movieList }) {
       } = movie;
 
       return `<div class="slider-item" slider-item>
-      <img
-        src="${imageBaseUrl}w1280${backdrop_path}" 
-        class="img-cover"
-        alt=${title}
-        loading=${index === 0 ? "eager" : "lazy"}
-      />
+        <img
+          src="${imageBaseUrl}w1280${backdrop_path}"
+          class="img-cover"
+          alt=${title}
+          loading=${index === 0 ? "eager" : "lazy"}
+        />
 
-      <!-- slider content -->
-      <div class="banner-content">
-        <h2 class="heading">${title}</h2>
+        <!-- slider content -->
+        <div class="banner-content">
+          <h2 class="heading">${title}</h2>
 
-        <div class="meta-list">
-          <div class="meta-item">${release_date.split("-")[0]}</div>
-          <div class="meta-item card-badge">${vote_average.toFixed(1)}</div>
+          <div class="meta-list">
+            <div class="meta-item">${release_date.split("-")[0]}</div>
+            <div class="meta-item card-badge">${vote_average.toFixed(1)}</div>
+          </div>
+
+          <p class="genre">${gnereList.asString(genre_ids)}</p>
+          <p class="banner-text">${overview}</p>
+
+          <a href="detail.html" class="btn">
+            <img
+              src="./assets//images/play_circle.png"
+              alt="play"
+              width="24"
+              height="24"
+            />
+            <span>Watch Now</span>
+          </a>
         </div>
-
-        <p class="genre">${gnereList.asString(genre_ids)}</p>
-        <p class="banner-text">
-          ${overview}
-        </p>
-
-        <a href="detail.html" class="btn">
-          <img
-            src="./assets//images/play_circle.png"
-            alt="play"
-            width="24"
-            height="24"
-          />
-          <span>Watch Now</span>
-        </a>
-      </div>
-    </div>`;
+      </div>`;
     })
     .join(" ");
 
@@ -111,19 +131,31 @@ function heroBanner({ results: movieList }) {
     ".slider-control .control-inner"
   );
 
-  let sliderInner = movieList
-    .map(function (movie, index) {
-      const { title, poster_path } = movie;
+  let sliderInner = movieList.map(function (movie, index) {
+    const { title, poster_path } = movie;
 
-      return `<button class="poster-box slider-item" slider-control>
-  <img src="${imageBaseUrl}w154${poster_path}" alt="${title}" loading="lazy" draggable="false" />
-</button>`;
-    })
-    .join(" ");
+    const button = document.createElement("button");
+    button.classList.add("poster-box", "slider-item");
+    button.setAttribute("slider-control", `${controllerIndex}`);
 
-  sliderControlInner.innerHTML = sliderInner;
+    button.innerHTML = `<img src="${imageBaseUrl}w154${poster_path}" alt="${title}" loading="lazy" draggable="false" />
+`;
+
+    controllerIndex++;
+
+    sliderControlInner.appendChild(button);
+  });
 
   addSlide();
+
+  //adding the home page section
+  for (const { title, path } of homePageSections) {
+    fetchMovieDetails(
+      `https://api.themoviedb.org/3${path}?language=en-US&page=1`,
+      createMovieList,
+      title
+    );
+  }
 }
 
 //adding the slider functionality
@@ -135,6 +167,49 @@ function addSlide() {
   let lastSliderControl = sliderControl[0];
 
   lastSliderItem.classList.add("active");
-  console.log(lastSliderControl);
   lastSliderControl.classList.add("active");
+
+  function sliderStart() {
+    lastSliderControl.classList.remove("active");
+    lastSliderItem.classList.remove("active");
+
+    lastSliderControl = this;
+    let sliderCount = +this.getAttribute("slider-control");
+    lastSliderItem = sliderItem[sliderCount];
+
+    // console.log(typeof sliderCount + "slider count : " + sliderCount);
+    lastSliderItem.classList.add("active");
+    lastSliderControl.classList.add("active");
+  }
+
+  sliderControl.forEach(function (control) {
+    control.addEventListener("click", sliderStart);
+  });
+}
+
+//adding the movie list
+function createMovieList({ results: movieList }, title) {
+  const movieSection = document.createElement("section");
+  movieSection.classList.add("movie-list");
+  movieSection.dataset.label = title;
+
+  movieSection.innerHTML = ` 
+  <div class="title-wrapper">
+      <h3 class="title-large">${title}</h3>
+    </div>
+
+    <!--movie-list-slider -->
+    <div class="slider-list">
+      <div class="slider-inner">
+        <!-- single-movie -->
+      </div>
+    </div>`;
+
+  for (const movie of movieList) {
+    const movieCard = createMovieCard(movie);
+    const sliderInner = movieSection.querySelector(".slider-inner");
+    sliderInner.appendChild(movieCard);
+  }
+
+  container.appendChild(movieSection);
 }

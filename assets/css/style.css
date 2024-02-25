@@ -303,7 +303,6 @@ body {
 .slider-list .slider-inner {
   position: relative;
   display: flex;
-  gap: 16px;
   padding-block-start: 8px;
 }
 
@@ -642,8 +641,11 @@ input.search-field {
 }
 
 .banner-text {
-  -webkit-line-clamp: 2;
-  margin-block-end: 24px;
+  height: 6em;
+  overflow: hidden;
+  -webkit-line-clamp: 4;
+  margin-block: 24px;
+  text-overflow: ellipsis;
 
 }
 
@@ -703,6 +705,7 @@ input.search-field {
 
 .movie-card {
   position: relative;
+  padding-inline-end: 16px;
   min-width: 200px;
   margin-right: 24px;
 }
