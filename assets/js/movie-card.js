@@ -38,5 +38,9 @@ export function createMovieCard(movie) {
     <a href="detail.html" class="card-btn" title="${title}"></a>
   `;
 
+  movieCard.addEventListener("click", function () {
+    addMovieId(id);
+  });
+
   return movieCard;
 }

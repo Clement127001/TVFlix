@@ -8,10 +8,14 @@ window.addEventListener("DOMContentLoaded", initiateHome);
 
 async function initiateHome() {
   try {
+    // let req = [];
+    // req.push(createBanner());
+    // req.push(collectGenere());
+    // Promise.all([req]);
+    await createBanner();
     await collectGenere();
 
     //then the next task is to make the popular movies banner interactive
-    await createBanner();
   } catch (err) {
     console.log("Error occured");
   }
@@ -110,7 +114,7 @@ function heroBanner({ results: movieList }) {
           <p class="genre">${gnereList.asString(genre_ids)}</p>
           <p class="banner-text">${overview}</p>
 
-          <a href="detail.html" class="btn">
+          <a href="detail.html" class="btn" onClick="addMovieId(${id})">
             <img
               src="./assets//images/play_circle.png"
               alt="play"
@@ -213,3 +217,6 @@ function createMovieList({ results: movieList }, title) {
 
   container.appendChild(movieSection);
 }
+
+//and the multiple fetch call be optimized using the promise api
+//after completing the application it is recommended to optimize with concurrent programming

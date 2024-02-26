@@ -14,3 +14,8 @@ const searchTogglers = document.querySelectorAll("[search-toogler]");
 addEventOnElements(searchTogglers, function () {
   searchBox.classList.toggle("active");
 });
+
+//setting the movieid to localStorage
+function addMovieId(movieId) {
+  localStorage.setItem("movieId", String(movieId));
+}
